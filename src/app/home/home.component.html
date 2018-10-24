@@ -1,3 +1,59 @@
-<p>
-  home works!
-</p>
+<div class="row">
+  <div class="col-md-2">
+    <ul>
+      <li *ngFor="let movie of recivedData?.results">
+        {{movie.id}} <br>
+        <ng-container *ngIf="movie?.title else nameBlock">
+          {{movie?.title}}<br>
+        </ng-container>
+        <ng-template #nameBlock>
+          undefined
+        </ng-template>
+        <ng-container *ngIf="movie?.release_date else nameBlock">
+          {{movie.release_date}} <br>
+        </ng-container>
+        <ng-template #nameBlock>
+          undefined <br>
+        </ng-template>
+
+        {{movie.vote_average}} <br>
+        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-2">
+    <form>
+      <input type="search" id="search" name="search" [(ngModel)]="searchedWord" (keyup)="displayFilterData()">
+    </form>
+
+    <ul>
+      <li *ngFor="let movie of filteredData?.results">
+        <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br>
+        id:{{movieId}}
+        <br>
+        <ng-container *ngIf="movie?.title else nameBlock">
+          {{movie?.title}}<br>
+        </ng-container>
+        <ng-template #nameBlock>
+          undefined
+        </ng-template>
+        <ng-container *ngIf="movie?.release_date else nameBlock">
+          {{movie.release_date}} <br>
+        </ng-container>
+        <ng-template #nameBlock>
+          undefined <br>
+        </ng-template>
+
+        {{movie.vote_average}} <br>
+        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    {{selectedMovieData.title}}<br>
+    {{selectedMovieData.overview}}<br>
+    <img [src]="'https://image.tmdb.org/t/p/w500'+ selectedMovieData.backdrop_path"><br>
+    {{selectedMovieData.vote_average}} <br>
+    {{selectedMovieData.release_date}}
+  </div>
+</div>
