@@ -1,27 +1,8 @@
-<div class="row">
-  <div class="col-md-2">
-    <ul>
-      <li *ngFor="let movie of recivedData?.results">
-        {{movie.id}} <br>
-        <ng-container *ngIf="movie?.title else nameBlock">
-          {{movie?.title}}<br>
-        </ng-container>
-        <ng-template #nameBlock>
-          undefined
-        </ng-template>
-        <ng-container *ngIf="movie?.release_date else nameBlock">
-          {{movie.release_date}} <br>
-        </ng-container>
-        <ng-template #nameBlock>
-          undefined <br>
-        </ng-template>
-
-        {{movie.vote_average}} <br>
-        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
-      </li>
-    </ul>
+<!-- <div class="row">
+  <div class="column column-3">
+    
   </div>
-  <div class="col-md-2">
+  <div class="column column-3">
     <form>
       <input type="search" id="search" name="search" [(ngModel)]="searchedWord" (keyup)="displayFilterData()">
     </form>
@@ -45,15 +26,154 @@
         </ng-template>
 
         {{movie.vote_average}} <br>
-        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+        <ng-container *ngIf="movie.backdrop_path else unavailable">
+          <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+        </ng-container>
+        <ng-template #unavailable>
+          <img src="https://via.placeholder.com/200x150?text=Unavailable!"><br>
+        </ng-template>
+
       </li>
     </ul>
   </div>
-  <div class="col-md-6">
-    {{selectedMovieData.title}}<br>
-    {{selectedMovieData.overview}}<br>
-    <img [src]="'https://image.tmdb.org/t/p/w500'+ selectedMovieData.backdrop_path"><br>
-    {{selectedMovieData.vote_average}} <br>
-    {{selectedMovieData.release_date}}
+
+
+  <div class="column column-6" *ngIf="selectedMovieData">
+    {{selectedMovieData?.title}}<br>
+    {{selectedMovieData?.overview}}<br>
+    <ng-container *ngIf="selectedMovieData.backdrop_path else unavailable">
+      <img *ngIf="selectedMovieData.backdrop_path" [src]="'https://image.tmdb.org/t/p/w500'+ selectedMovieData?.backdrop_path">
+    </ng-container>
+    <ng-template #unavailable>
+      <img src="https://via.placeholder.com/1000x500?text=Unavailable!" width="100%"><br>
+    </ng-template>
+    <br>
+    {{selectedMovieData?.vote_average}} <br>
+    {{selectedMovieData?.release_date}}
+  </div>
+
+</div> -->
+<div class="container-box">
+  <form>
+    <input type="search" id="search" name="search" placeholder="search" [(ngModel)]="searchedWord" (keyup)="displayFilterData()">
+  </form>
+</div>
+
+<div class="container-box">
+  <div class="row">
+    <div class="column lg-2 md-12">
+      <ul>
+        <li *ngFor="let movie of recivedData?.results">
+          {{movie.id}} <br>
+          <ng-container *ngIf="movie?.title else nameBlock">
+            {{movie?.title}}<br>
+          </ng-container>
+          <ng-template #nameBlock>
+            undefined
+          </ng-template>
+          <ng-container *ngIf="movie?.release_date else nameBlock">
+            {{movie.release_date}} <br>
+          </ng-container>
+          <ng-template #nameBlock>
+            undefined <br>
+          </ng-template>
+
+          {{movie.vote_average}} <br>
+          <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+        </li>
+      </ul>
+    </div>
+    <div class="column lg-10 md-12">
+
+      <ng-container *ngIf="filteredData?.results?.length>0 else treandingMovies">
+        <div class="column lg-3 md-12" *ngFor="let movie of filteredData?.results">
+          <ul>
+            <li>
+              <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br>
+              id:{{movieId}}
+              <br>
+              <ng-container *ngIf="movie?.title else nameBlock">
+                {{movie?.title}}<br>
+              </ng-container>
+              <ng-template #nameBlock>
+                undefined
+              </ng-template>
+              <ng-container *ngIf="movie?.release_date else nameBlock">
+                {{movie.release_date}} <br>
+              </ng-container>
+              <ng-template #nameBlock>
+                undefined <br>
+              </ng-template>
+
+              {{movie.vote_average}} <br>
+              <ng-container *ngIf="movie.backdrop_path else unavailable">
+                <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+              </ng-container>
+              <ng-template #unavailable>
+                <img src="https://via.placeholder.com/200x150?text=Unavailable!"><br>
+              </ng-template>
+
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-template #treandingMovies>
+        <ng-container *ngIf="dataNotFound!=='' else showTrendingMovies">
+          <h1>{{this.dataNotFound}}</h1>
+          <button (click)="showPreviousData()">back to the previous View</button>
+        </ng-container>
+
+        <ng-template #showTrendingMovies>
+          <div class="column lg-3  md-12" *ngFor="let movie of recivedData?.results">
+            <ul>
+              <li>
+                <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br>
+
+                {{movie.id}} <br>
+                <ng-container *ngIf="movie?.title else nameBlock">
+                  {{movie?.title}}<br>
+                </ng-container>
+                <ng-template #nameBlock>
+                  undefined
+                </ng-template>
+                <ng-container *ngIf="movie?.release_date else nameBlock">
+                  {{movie.release_date}} <br>
+                </ng-container>
+                <ng-template #nameBlock>
+                  undefined <br>
+                </ng-template>
+
+                {{movie.vote_average}} <br>
+                <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+              </li>
+            </ul>
+          </div>
+
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="selectedMovieData">
+
+  <div class="overlayed-box" [ngClass]="{'toggle' : containerBox}">
+    <!--  <div class="background-image" [ngStyle]="{ 'background-url': url({{selectedMovieData?.backdrop_path}})}"> -->
+
+    <!-- </div> -->
+    <ng-container *ngIf="selectedMovieData.backdrop_path else unavailable">
+      <img *ngIf="selectedMovieData.backdrop_path" [src]="'https://image.tmdb.org/t/p/w500'+ selectedMovieData?.backdrop_path">
+    </ng-container>
+    <ng-template #unavailable>
+      <img src="https://via.placeholder.com/1000x500?text=Unavailable!" width="100%"><br>
+    </ng-template>
+    <button (click)="movieDetailsToggler()">toggle</button>
+    {{selectedMovieData?.title}}<br>
+    {{selectedMovieData?.overview}}<br>
+
+    <br>
+    {{selectedMovieData?.vote_average}} <br>
+    {{selectedMovieData?.release_date}}
   </div>
 </div>

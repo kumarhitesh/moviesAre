@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { GetThelistService } from '../services/getThelist.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -8,39 +7,59 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public recivedData: any;
-  public filteredData: any;
-  public searchedWord: any;
+  public recivedData: any = [];
+  public filteredData: any = [];
+  public searchedWord: string;
   // public movieId: any;
   public selectedMovieData: any;
+  public dataNotFound: string;
+  public containerBox = false;
 
-  constructor(public getThedataService: GetThelistService, private http: HttpClient) { }
+  constructor(public getThedataService: GetThelistService) { }
 
   ngOnInit() {
     this.showData();
-    this.displayFilterData();
+
+    console.log(this.searchedWord);
   }
 
   public showData() {
     this.getThedataService.getTheData()
       .subscribe((data) => {
         this.recivedData = data;
-        console.log(this.recivedData.results);
       });
+    this.dataNotFound = '';
+    this.filteredData = [];
   }
 
 
   public displayFilterData() {
-    this.getThedataService.getTheFilterData(this.searchedWord).subscribe((data) => {
-      this.filteredData = data;
-      console.log(this.filteredData.results);
-    });
+    if (this.searchedWord && this.searchedWord !== '') {
+      this.getThedataService.getTheFilterData(this.searchedWord).subscribe((data: any) => {
+        console.log('I got this.', data.results);
+        if (data.results.length > 0) {
+          this.filteredData = data;
+        } else {
+          this.dataNotFound = 'No Movie found';
+          this.filteredData = [];
+        }
+      });
+    } else if (this.searchedWord === '') {
+      this.dataNotFound = 'Search feild is empty';
+      this.filteredData = [];
+    }
   }
   public displaySelectedMovieData(movieId) {
     this.getThedataService.getSetectedmovieData(movieId).subscribe((data) => {
       this.selectedMovieData = data;
-      console.log(this.selectedMovieData);
     });
+    this.containerBox = true;
   }
 
+  public showPreviousData() {
+    this.dataNotFound = '';
+  }
+  public movieDetailsToggler() {
+    this.containerBox = !this.containerBox;
+  }
 }
