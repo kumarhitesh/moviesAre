@@ -53,34 +53,38 @@
   </div>
 
 </div> -->
-<div class="container-box">
+<div class="container-box header">
   <form>
-    <input type="search" id="search" name="search" placeholder="search" [(ngModel)]="searchedWord" (keyup)="displayFilterData()">
+    <input type="search" id="search" name="Search " placeholder="search" class="searchbox" [(ngModel)]="searchedWord"
+      (keyup)="displayFilterData()">
   </form>
 </div>
 
 <div class="container-box">
   <div class="row">
     <div class="column lg-2 md-12">
-      <div *ngFor="let movie of recivedData?.results" (click)="displaySelectedMovieData(movie.id)">
-        <!-- <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br> -->
-
-        <!-- {{movie.id}} <br> -->
-        <ng-container *ngIf="movie?.title else nameBlock">
-          {{movie?.title}}<br>
-        </ng-container>
-        <ng-template #nameBlock>
-          undefined
-        </ng-template>
-        <!-- <ng-container *ngIf="movie?.release_date else nameBlock">
+      <div *ngFor="let movie of recivedData?.results" (click)="displaySelectedMovieData(movie.id)" class="card">
+        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+        <div>
+          <!-- {{movie.id}} <br> -->
+          <ng-container *ngIf="movie?.title else nameBlock">
+            <p>{{movie?.title}}</p>
+          </ng-container>
+          <ng-template #nameBlock>
+            <p>undefined</p>
+          </ng-template>
+          <!-- <ng-container *ngIf="movie?.release_date else nameBlock">
               {{movie.release_date}} <br>
             </ng-container>
             <ng-template #nameBlock>
               undefined <br>
             </ng-template> -->
+          <b>{{movie.vote_average}}</b>
+          <button>Details</button>
+        </div>
 
-        {{movie.vote_average}} <br>
-        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+
+
 
       </div>
     </div>
