@@ -62,60 +62,61 @@
 <div class="container-box">
   <div class="row">
     <div class="column lg-2 md-12">
-      <ul>
-        <li *ngFor="let movie of recivedData?.results">
-          {{movie.id}} <br>
+      <div *ngFor="let movie of recivedData?.results" (click)="displaySelectedMovieData(movie.id)">
+        <!-- <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br> -->
+
+        <!-- {{movie.id}} <br> -->
+        <ng-container *ngIf="movie?.title else nameBlock">
+          {{movie?.title}}<br>
+        </ng-container>
+        <ng-template #nameBlock>
+          undefined
+        </ng-template>
+        <!-- <ng-container *ngIf="movie?.release_date else nameBlock">
+              {{movie.release_date}} <br>
+            </ng-container>
+            <ng-template #nameBlock>
+              undefined <br>
+            </ng-template> -->
+
+        {{movie.vote_average}} <br>
+        <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+
+      </div>
+    </div>
+
+
+    <div class="column lg-10 md-12">
+
+      <ng-container *ngIf="filteredData?.results?.length>0 else treandingMovies">
+        <div *ngFor="let movie of filteredData?.results" (click)="displaySelectedMovieData(movie.id)" class="column lg-3 md-12">
+
+          <!-- <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br> -->
+          <!-- id:{{movieId}} -->
+          <!-- <br> -->
           <ng-container *ngIf="movie?.title else nameBlock">
             {{movie?.title}}<br>
           </ng-container>
           <ng-template #nameBlock>
             undefined
           </ng-template>
-          <ng-container *ngIf="movie?.release_date else nameBlock">
+          <!-- <ng-container *ngIf="movie?.release_date else nameBlock">
             {{movie.release_date}} <br>
           </ng-container>
           <ng-template #nameBlock>
             undefined <br>
-          </ng-template>
+          </ng-template> -->
 
           {{movie.vote_average}} <br>
-          <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
-        </li>
-      </ul>
-    </div>
-    <div class="column lg-10 md-12">
+          <ng-container *ngIf="movie.backdrop_path else unavailable">
+            <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
+          </ng-container>
+          <ng-template #unavailable>
+            <img src="https://via.placeholder.com/200x150?text=Unavailable!"><br>
+          </ng-template>
 
-      <ng-container *ngIf="filteredData?.results?.length>0 else treandingMovies">
-        <div class="column lg-3 md-12" *ngFor="let movie of filteredData?.results">
-          <ul>
-            <li>
-              <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br>
-              id:{{movieId}}
-              <br>
-              <ng-container *ngIf="movie?.title else nameBlock">
-                {{movie?.title}}<br>
-              </ng-container>
-              <ng-template #nameBlock>
-                undefined
-              </ng-template>
-              <ng-container *ngIf="movie?.release_date else nameBlock">
-                {{movie.release_date}} <br>
-              </ng-container>
-              <ng-template #nameBlock>
-                undefined <br>
-              </ng-template>
-
-              {{movie.vote_average}} <br>
-              <ng-container *ngIf="movie.backdrop_path else unavailable">
-                <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
-              </ng-container>
-              <ng-template #unavailable>
-                <img src="https://via.placeholder.com/200x150?text=Unavailable!"><br>
-              </ng-template>
-
-            </li>
-          </ul>
         </div>
+
       </ng-container>
       <ng-template #treandingMovies>
         <ng-container *ngIf="dataNotFound!=='' else showTrendingMovies">
@@ -124,29 +125,25 @@
         </ng-container>
 
         <ng-template #showTrendingMovies>
-          <div class="column lg-3  md-12" *ngFor="let movie of recivedData?.results">
-            <ul>
-              <li>
-                <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br>
+          <div *ngFor="let movie of recivedData?.results" (click)="displaySelectedMovieData(movie.id)" class="column lg-3  md-12">
+            <!-- <button id="movieId" (click)="displaySelectedMovieData(movie.id)" name="movieId" value="{{movie.id}}">{{movie.id}}</button><br> -->
 
-                {{movie.id}} <br>
-                <ng-container *ngIf="movie?.title else nameBlock">
-                  {{movie?.title}}<br>
-                </ng-container>
-                <ng-template #nameBlock>
-                  undefined
-                </ng-template>
-                <ng-container *ngIf="movie?.release_date else nameBlock">
-                  {{movie.release_date}} <br>
-                </ng-container>
-                <ng-template #nameBlock>
-                  undefined <br>
-                </ng-template>
+            <!-- {{movie.id}} <br> -->
+            <ng-container *ngIf="movie?.title else nameBlock">
+              {{movie?.title}}<br>
+            </ng-container>
+            <ng-template #nameBlock>
+              undefined
+            </ng-template>
+            <!-- <ng-container *ngIf="movie?.release_date else nameBlock">
+              {{movie.release_date}} <br>
+            </ng-container>
+            <ng-template #nameBlock>
+              undefined <br>
+            </ng-template> -->
 
-                {{movie.vote_average}} <br>
-                <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
-              </li>
-            </ul>
+            {{movie.vote_average}} <br>
+            <img [src]="'https://image.tmdb.org/t/p/w200'+ movie.backdrop_path">
           </div>
 
         </ng-template>
